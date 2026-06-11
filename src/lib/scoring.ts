@@ -64,10 +64,10 @@ export function computeLeaderboard(
 
 export const STAGE_LABELS: Record<string, string> = {
   group: "Grupe",
-  r32: "Optimimi de finală",
-  r16: "Șaisprezecimi",
-  qf: "Sferturi de finală",
+  r32: "Șaisprezecimi",
+  r16: "Optimi",
+  qf: "Sferturi",
   sf: "Semifinale",
   "3rd": "Locul 3",
-  final: "Finală",
+  final: "Finala",
 };
