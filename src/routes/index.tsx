@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
   component: App,
 });
 
-type Tab = "predictions" | "leaderboard" | "admin" | "settings";
+type Tab = "predictions" | "leaderboard" | "admin" | "teams" | "settings";
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -54,6 +54,7 @@ function App() {
               {tab === "predictions" && "⚽ Pronosticuri"}
               {tab === "leaderboard" && "🏆 Clasament"}
               {tab === "admin" && "🔧 Rezultate"}
+              {tab === "teams" && "👥 Echipe"}
               {tab === "settings" && "⚙️ Setări"}
             </button>
           ))}
@@ -78,6 +79,9 @@ function App() {
         )}
         {activeTab === "admin" && (
           <AdminTab matches={matches} onSaved={loadData} />
+        )}
+        {activeTab === "teams" && (
+          <TeamsTab matches={matches} onSaved={loadData} />
         )}
         {activeTab === "settings" && (
           <SettingsTab players={players} onSaved={loadData} />
@@ -520,6 +524,128 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
         {filtered.length === 0 && (
           <div className="text-center text-white/40 py-10">Niciun meci de afișat</div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Teams Tab ─────────────────────────────────────────────────────────────
+
+function TeamsTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void }) {
+  const [edits, setEdits] = useState<Record<number, { home: string; away: string }>>({});
+  const [saving, setSaving] = useState<number | null>(null);
+  const [filterStage, setFilterStage] = useState<string>("r32");
+
+  // Show only knockout matches with placeholder teams
+  const knockoutMatches = matches.filter(
+    (m) => m.stage !== "group" && 
+           (m.homeTeam.match(/^[123][A-L]/) || m.awayTeam.match(/^[WL]\d+/))
+  );
+
+  const filtered = knockoutMatches.filter(
+    (m) => filterStage === "all" || m.stage === filterStage
+  );
+
+  const handleChange = (matchId: number, field: "home" | "away", val: string) => {
+    setEdits((prev) => ({
+      ...prev,
+      [matchId]: { ...(prev[matchId] ?? { home: "", away: "" }), [field]: val.slice(0, 30) },
+    }));
+  };
+
+  const handleSave = async (matchId: number) => {
+    const e = edits[matchId];
+    if (!e || !e.home.trim() || !e.away.trim()) return;
+
+    setSaving(matchId);
+    await fetch("/api/matches/teams", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        matchId,
+        homeTeam: e.home.trim(),
+        awayTeam: e.away.trim(),
+      }),
+    });
+    setEdits((prev) => {
+      const n = { ...prev };
+      delete n[matchId];
+      return n;
+    });
+    await onSaved();
+    setSaving(null);
+  };
+
+  const knockoutStages = Array.from(new Set(knockoutMatches.map((m) => m.stage)));
+
+  return (
+    <div>
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-5 text-blue-200 text-sm">
+        <strong>Editare echipe:</strong> După finalizarea grupelor, completați echipele pentru faza eliminatorie.
+      </div>
+
+      <div className="flex gap-2 mb-5 flex-wrap">
+        <button
+          onClick={() => setFilterStage("all")}
+          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+            filterStage === "all" ? "bg-yellow-400 text-black" : "bg-white/10 text-white/60"
+          }`}
+        >
+          Toate
+        </button>
+        {knockoutStages.map((stage) => (
+          <button
+            key={stage}
+            onClick={() => setFilterStage(stage)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              filterStage === stage ? "bg-yellow-400 text-black" : "bg-white/10 text-white/60"
+            }`}
+          >
+            {STAGE_LABELS[stage] ?? stage}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-3">
+        {filtered.map((match) => {
+          const edit = edits[match.id];
+          const homeVal = edit?.home ?? match.homeTeam;
+          const awayVal = edit?.away ?? match.awayTeam;
+
+          return (
+            <div key={match.id} className="bg-white/5 rounded-xl border border-white/10 p-4 flex items-center gap-4">
+              <div className="flex-1">
+                <div className="text-white/60 text-xs mb-2">
+                  {STAGE_LABELS[match.stage]} • {match.matchDate ? new Date(match.matchDate).toLocaleDateString("ro-RO") : ""}
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={homeVal}
+                    onChange={(e) => handleChange(match.id, "home", e.target.value)}
+                    placeholder="Echipa acasă"
+                    className="flex-1 bg-white/10 text-white rounded px-3 py-2 text-sm border border-white/20 focus:outline-none focus:border-yellow-400"
+                  />
+                  <span className="text-white/40 text-sm font-mono">vs</span>
+                  <input
+                    type="text"
+                    value={awayVal}
+                    onChange={(e) => handleChange(match.id, "away", e.target.value)}
+                    placeholder="Echipa oaspeți"
+                    className="flex-1 bg-white/10 text-white rounded px-3 py-2 text-sm border border-white/20 focus:outline-none focus:border-yellow-400"
+                  />
+                  <button
+                    onClick={() => handleSave(match.id)}
+                    disabled={saving === match.id || homeVal === match.homeTeam && awayVal === match.awayTeam}
+                    className="bg-yellow-400 text-black font-bold px-3 py-2 rounded-lg text-sm hover:bg-yellow-300 disabled:opacity-40 transition-colors whitespace-nowrap"
+                  >
+                    {saving === match.id ? "..." : "Salvează"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
