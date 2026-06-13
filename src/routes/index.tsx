@@ -133,15 +133,57 @@ function PredictionsTab({
   setFilterGroup: (g: string) => void;
   onSaved: () => void;
 }) {
-  const stages = ["all", ...Array.from(new Set(matches.map((m) => m.stage)))];
+  const stages = ["all", "sortOrder", ...Array.from(new Set(matches.map((m) => m.stage)))];
   const groups = ["all", ...Array.from(new Set(matches.filter((m) => m.groupName).map((m) => m.groupName!))).sort()];
 
   const filtered = matches.filter((m) => {
-    if (filterStage !== "all" && m.stage !== filterStage) return false;
+    if (filterStage !== "all" && filterStage !== "sortOrder" && m.stage !== filterStage) return false;
     if (filterGroup !== "all" && m.groupName !== filterGroup) return false;
     return true;
   });
 
+  // If sortOrder is selected, show all matches sorted by sortOrder without grouping
+  if (filterStage === "sortOrder") {
+    const sortedMatches = [...filtered].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+
+    return (
+      <div>
+        <div className="bg-white/5 rounded-xl p-4 mb-6 flex flex-wrap gap-3 items-center">
+          <div className="flex items-center gap-2">
+            <span className="text-white/60 text-sm">Fază:</span>
+            <select
+              value={filterStage}
+              onChange={(e) => setFilterStage(e.target.value)}
+              className="bg-white/10 text-white rounded-lg px-3 py-1.5 text-sm border border-white/20 focus:outline-none"
+            >
+              {stages.map((s) => (
+                <option key={s} value={s} className="bg-green-900">
+                  {s === "all" ? "Toate" : s === "sortOrder" ? "După ordine" : STAGE_LABELS[s] ?? s}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="ml-auto text-white/40 text-xs">
+            {filtered.length} meciuri
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {sortedMatches.map((match) => (
+            <MatchCard
+              key={match.id}
+              match={match}
+              players={players}
+              predictions={predictions.filter((p) => p.matchId === match.id)}
+              onSaved={onSaved}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Original grouping logic for other stages
   const stageGroups = filtered.reduce<Record<string, Match[]>>((acc, m) => {
     const key = m.groupName ? `Grupa ${m.groupName}` : STAGE_LABELS[m.stage] ?? m.stage;
     if (!acc[key]) acc[key] = [];
@@ -166,7 +208,7 @@ function PredictionsTab({
           >
             {stages.map((s) => (
               <option key={s} value={s} className="bg-green-900">
-                {s === "all" ? "Toate" : STAGE_LABELS[s] ?? s}
+                {s === "all" ? "Toate" : s === "sortOrder" ? "După ordine" : STAGE_LABELS[s] ?? s}
               </option>
             ))}
           </select>
@@ -497,7 +539,7 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-5 text-yellow-200 text-sm">
         <strong>Panou admin:</strong> Introduceți scorurile reale ale meciurilor aici. Clasamentul se actualizează automat. 
         <br />
-        <span className="text-white/60 text-xs">Pentru meciurile eliminatorii, puteți modifica direct numele „W49", „1A" etc. cu numele echipei calificate, apoi apăsați „Actualizează Echipe".</span>
+        <span className="text-white/60 text-xs">Pentru meciurile eliminatorii, puteți modifica direct numele „W49", „1A" etc. cu numele echipei calificate, apoi apăsați „Actualizează Ec[...]
       </div>
 
       <div className="flex gap-2 mb-5">
@@ -795,7 +837,7 @@ function SettingsTab({ players, onSaved }: { players: Player[]; onSaved: () => v
                 key={c}
                 onClick={() => setColors((p) => ({ ...p, [player.id]: c }))}
                 style={{ backgroundColor: c }}
-                className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${(colors[player.id] ?? player.color) === c ? "ring-2 ring-white ring-offset-1 ring-offset-transparent scale-110" : ""}`}
+                className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${(colors[player.id] ?? player.color) === c ? "ring-2 ring-white ring-offset-1 ring-offset-transparent scale-[...]
               />
             ))}
           </div>
