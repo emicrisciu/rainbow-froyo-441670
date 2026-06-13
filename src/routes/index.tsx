@@ -118,7 +118,7 @@ function Header() {
   );
 }
 
-// ─── Predictions Tab ─────────────────────────────────────────────────────────
+// ─── Predictions Tab ───────────────────────────────────────────────────────
 
 function PredictionsTab({
   players, matches, predictions, filterStage, filterGroup,
@@ -148,6 +148,11 @@ function PredictionsTab({
     acc[key].push(m);
     return acc;
   }, {});
+
+  // Sort matches within each group by sortOrder
+  Object.keys(stageGroups).forEach((key) => {
+    stageGroups[key].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+  });
 
   return (
     <div>
@@ -339,7 +344,7 @@ function MatchCard({
   );
 }
 
-// ─── Leaderboard Tab ─────────────────────────────────────────────────────────
+// ─── Leaderboard Tab ───────────────────────────────────────────────────────
 
 function LeaderboardTab({ players, matches, predictions }: {
   players: Player[];
@@ -396,7 +401,7 @@ function LeaderboardTab({ players, matches, predictions }: {
   );
 }
 
-// ─── Admin Tab ────────────────────────────────────────────────────────────────
+// ─── Admin Tab ─────────────────────────────────────────────────────────
 
 function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void }) {
   const [results, setResults] = useState<Record<number, { home: string; away: string }>>({});
@@ -492,7 +497,7 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-5 text-yellow-200 text-sm">
         <strong>Panou admin:</strong> Introduceți scorurile reale ale meciurilor aici. Clasamentul se actualizează automat. 
         <br />
-        <span className="text-white/60 text-xs">Pentru meciurile eliminatorii, puteți modifica direct numele „W49”, „1A” etc. cu numele echipei calificate, apoi apăsați „Actualizează Echipe”.</span>
+        <span className="text-white/60 text-xs">Pentru meciurile eliminatorii, puteți modifica direct numele „W49", „1A" etc. cu numele echipei calificate, apoi apăsați „Actualizează Echipe".</span>
       </div>
 
       <div className="flex gap-2 mb-5">
@@ -616,7 +621,7 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
     </div>
   );
 }
-// ─── Teams Tab ─────────────────────────────────────────────────────────────
+// ─── Teams Tab ─────────────────────────────────────────────────────────
 
 function TeamsTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void }) {
   const [edits, setEdits] = useState<Record<number, { home: string; away: string }>>({});
@@ -738,7 +743,7 @@ function TeamsTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
   );
 }
 
-// ─── Settings Tab ─────────────────────────────────────────────────────────────
+// ─── Settings Tab ────────────────────────────────────────────────────────
 
 function SettingsTab({ players, onSaved }: { players: Player[]; onSaved: () => void }) {
   const [names, setNames] = useState<Record<number, string>>({});
