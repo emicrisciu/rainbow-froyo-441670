@@ -400,17 +400,58 @@ function LeaderboardTab({ players, matches, predictions }: {
 
 function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void }) {
   const [results, setResults] = useState<Record<number, { home: string; away: string }>>({});
+  
+  // Stare nouă pentru a edita numele echipelor în fazele eliminatorii
+  const [editableTeams, setEditableTeams] = useState<Record<number, { homeTeam: string; awayTeam: string }>>({});
+  
   const [saving, setSaving] = useState<number | null>(null);
+  const [savingTeams, setSavingTeams] = useState<number | null>(null);
   const [filterPlayed, setFilterPlayed] = useState<"all" | "pending" | "played">("pending");
 
-  const handleChange = (matchId: number, field: "home" | "away", val: string) => {
+  // Inițializează sau modifică textul pentru numele echipelor
+  const handleTeamNameChange = (matchId: number, field: "homeTeam" | "awayTeam", currentMatch: Match, val: string) => {
+    setEditableTeams((prev) => ({
+      ...prev,
+      [matchId]: {
+        homeTeam: prev[matchId]?.homeTeam ?? currentMatch.homeTeam,
+        awayTeam: prev[matchId]?.awayTeam ?? currentMatch.awayTeam,
+        [field]: val,
+      },
+    }));
+  };
+
+  // Salvează numele echipelor modificate (ex: Înlocuiește W49 cu "România")
+  const handleSaveTeams = async (match: Match) => {
+    const et = editableTeams[match.id];
+    if (!et) return;
+
+    setSavingTeams(match.id);
+    try {
+      // Trimitem la un endpoint dedicat update-ului de echipe (sau la cel existent dacă suportă)
+      await fetch("/api/matches/teams", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          matchId: match.id,
+          homeTeam: et.homeTeam,
+          awayTeam: et.awayTeam,
+        }),
+      });
+      await onSaved(); // Forțează reîncărcarea datelor din părinte
+    } catch (error) {
+      console.error("Eroare la salvarea echipelor", error);
+    }
+    setSavingTeams(null);
+  };
+
+  const handleChangeScore = (matchId: number, field: "home" | "away", val: string) => {
     setResults((prev) => ({
       ...prev,
       [matchId]: { ...(prev[matchId] ?? { home: "", away: "" }), [field]: val.replace(/[^0-9]/g, "").slice(0, 2) },
     }));
   };
 
-  const handleSave = async (match: Match) => {
+  const handleSaveScore = async (match: Match) => {
     const r = results[match.id];
     if (!r || r.home === "" || r.away === "") return;
     setSaving(match.id);
@@ -449,7 +490,9 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
   return (
     <div>
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-5 text-yellow-200 text-sm">
-        <strong>Panou admin:</strong> Introduceți scorurile reale ale meciurilor aici. Clasamentul se actualizează automat.
+        <strong>Panou admin:</strong> Introduceți scorurile reale ale meciurilor aici. Clasamentul se actualizează automat. 
+        <br />
+        <span className="text-white/60 text-xs">Pentru meciurile eliminatorii, puteți modifica direct numele „W49”, „1A” etc. cu numele echipei calificate, apoi apăsați „Actualizează Echipe”.</span>
       </div>
 
       <div className="flex gap-2 mb-5">
@@ -465,62 +508,107 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
       </div>
 
       <div className="space-y-3">
-        {filtered.map((match) => (
-          <div key={match.id} className={`bg-white/5 rounded-xl border border-white/10 p-4 flex items-center gap-4 ${match.played ? "opacity-70" : ""}`}>
-            <div className="flex-1">
-              <div className="text-white font-semibold">
-                {match.homeTeam} vs {match.awayTeam}
-              </div>
-              <div className="text-white/40 text-xs">
-                {STAGE_LABELS[match.stage] ?? match.stage}
-                {match.groupName ? ` • Grupa ${match.groupName}` : ""}
-                {match.matchDate ? ` • ${new Date(match.matchDate).toLocaleDateString("ro-RO")}` : ""}
-              </div>
-            </div>
-            {match.played ? (
-              <div className="flex items-center gap-3">
-                <div className="bg-yellow-500 text-black font-black px-3 py-1 rounded-full">
-                  {match.homeScore} - {match.awayScore}
+        {filtered.map((match) => {
+          const isKnockout = match.stage !== "group";
+          const currentHomeTeam = editableTeams[match.id]?.homeTeam ?? match.homeTeam;
+          const currentAwayTeam = editableTeams[match.id]?.awayTeam ?? match.awayTeam;
+          const identityChanged = currentHomeTeam !== match.homeTeam || currentAwayTeam !== match.awayTeam;
+
+          return (
+            <div key={match.id} className={`bg-white/5 rounded-xl border border-white/10 p-4 flex flex-col md:flex-row md:items-center gap-4 ${match.played ? "opacity-70" : ""}`}>
+              
+              {/* Secțiunea Nume Echipe */}
+              <div className="flex-1">
+                {!match.played && isKnockout ? (
+                  /* Dacă e meci eliminatoriu și nu s-a jucat, adminul poate edita numele direct text */
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <input
+                      type="text"
+                      value={currentHomeTeam}
+                      onChange={(e) => handleTeamNameChange(match.id, "homeTeam", match, e.target.value)}
+                      className="bg-white/10 text-white font-semibold px-2 py-1 rounded border border-white/20 text-sm w-full sm:w-40 focus:border-yellow-400 outline-none"
+                    />
+                    <span className="text-white/40 self-center">vs</span>
+                    <input
+                      type="text"
+                      value={currentAwayTeam}
+                      onChange={(e) => handleTeamNameChange(match.id, "awayTeam", match, e.target.value)}
+                      className="bg-white/10 text-white font-semibold px-2 py-1 rounded border border-white/20 text-sm w-full sm:w-40 focus:border-yellow-400 outline-none"
+                    />
+                    {identityChanged && (
+                      <button
+                        onClick={() => handleSaveTeams(match)}
+                        disabled={savingTeams === match.id}
+                        className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition-colors"
+                      >
+                        {savingTeams === match.id ? "..." : "Actualizează Echipe"}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  /* Afișare normală text pentru meciurile de grupă sau cele deja jucate */
+                  <div className="text-white font-semibold">
+                    {match.homeTeam} vs {match.awayTeam}
+                  </div>
+                )}
+
+                <div className="text-white/40 text-xs mt-1">
+                  {/* @ts-ignore */}
+                  {typeof STAGE_LABELS !== "undefined" ? STAGE_LABELS[match.stage] : match.stage}
+                  {match.groupName ? ` • Grupa ${match.groupName}` : ""}
+                  {match.matchDate ? ` • ${new Date(match.matchDate).toLocaleDateString("ro-RO")}` : ""}
                 </div>
-                <button
-                  onClick={() => handleUndo(match.id)}
-                  disabled={saving === match.id}
-                  className="text-white/40 hover:text-red-400 text-xs transition-colors"
-                  title="Anulează"
-                >
-                  ✕
-                </button>
               </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="0"
-                  value={results[match.id]?.home ?? ""}
-                  onChange={(e) => handleChange(match.id, "home", e.target.value)}
-                  className="w-10 h-9 text-center font-bold bg-white/10 text-white rounded border border-white/20 focus:outline-none focus:border-yellow-400"
-                />
-                <span className="text-white/40">-</span>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="0"
-                  value={results[match.id]?.away ?? ""}
-                  onChange={(e) => handleChange(match.id, "away", e.target.value)}
-                  className="w-10 h-9 text-center font-bold bg-white/10 text-white rounded border border-white/20 focus:outline-none focus:border-yellow-400"
-                />
-                <button
-                  onClick={() => handleSave(match)}
-                  disabled={saving === match.id || !results[match.id]?.home || !results[match.id]?.away}
-                  className="bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-300 disabled:opacity-40 transition-colors"
-                >
-                  {saving === match.id ? "..." : "Salvează"}
-                </button>
+
+              {/* Secțiunea Scoruri / Salvare */}
+              <div className="flex items-center justify-end gap-2 border-t border-white/5 pt-3 md:pt-0 md:border-none">
+                {match.played ? (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-yellow-500 text-black font-black px-3 py-1 rounded-full">
+                      {match.homeScore} - {match.awayScore}
+                    </div>
+                    <button
+                      onClick={() => handleUndo(match.id)}
+                      disabled={saving === match.id}
+                      className="text-white/40 hover:text-red-400 text-xs transition-colors"
+                      title="Anulează"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="0"
+                      value={results[match.id]?.home ?? ""}
+                      onChange={(e) => handleChangeScore(match.id, "home", e.target.value)}
+                      className="w-10 h-9 text-center font-bold bg-white/10 text-white rounded border border-white/20 focus:outline-none focus:border-yellow-400"
+                    />
+                    <span className="text-white/40">-</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="0"
+                      value={results[match.id]?.away ?? ""}
+                      onChange={(e) => handleChangeScore(match.id, "away", e.target.value)}
+                      className="w-10 h-9 text-center font-bold bg-white/10 text-white rounded border border-white/20 focus:outline-none focus:border-yellow-400"
+                    />
+                    <button
+                      onClick={() => handleSaveScore(match)}
+                      disabled={saving === match.id || !results[match.id]?.home || !results[match.id]?.away}
+                      className="bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-300 disabled:opacity-40 transition-colors"
+                    >
+                      {saving === match.id ? "..." : "Salvează Scor"}
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+
+            </div>
+          );
+        })}
         {filtered.length === 0 && (
           <div className="text-center text-white/40 py-10">Niciun meci de afișat</div>
         )}
@@ -528,7 +616,6 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
     </div>
   );
 }
-
 // ─── Teams Tab ─────────────────────────────────────────────────────────────
 
 function TeamsTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void }) {
