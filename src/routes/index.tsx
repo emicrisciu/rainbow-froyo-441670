@@ -433,7 +433,7 @@ function AdminTab({ matches, onSaved }: { matches: Match[]; onSaved: () => void 
     setSavingTeams(match.id);
     try {
       // Trimitem la un endpoint dedicat update-ului de echipe (sau la cel existent dacă suportă)
-      await fetch("/api/matches/teams", {
+      await fetch("/api/matches/matches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
