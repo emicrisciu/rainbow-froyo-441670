@@ -8,92 +8,115 @@ export type MatchSeed = {
 };
 
 // FIFA World Cup 2026 — Group Stage matches
-// Groups based on the official December 2024 draw
+// Sorted chronologically by matchDate
 const GROUP_MATCHES: MatchSeed[] = [
-  // Group A
+  // 2026-06-11
   { stage: "group", groupName: "A", homeTeam: "Mexic", awayTeam: "Africa de Sud", matchDate: "2026-06-11", sortOrder: 1 },
+
+  // 2026-06-12
   { stage: "group", groupName: "A", homeTeam: "Coreea de Sud", awayTeam: "Cehia", matchDate: "2026-06-12", sortOrder: 2 },
-  { stage: "group", groupName: "A", homeTeam: "Cehia", awayTeam: "Africa de Sud", matchDate: "2026-06-18", sortOrder: 3 },
-  { stage: "group", groupName: "A", homeTeam: "Mexic", awayTeam: "Coreea de Sud", matchDate: "2026-06-19", sortOrder: 4 },
-  { stage: "group", groupName: "A", homeTeam: "Cehia", awayTeam: "Mexic", matchDate: "2026-06-24", sortOrder: 5 },
-  { stage: "group", groupName: "A", homeTeam: "Africa de Sud", awayTeam: "Coreea de Sud", matchDate: "2026-06-24", sortOrder: 6 },
-  // Group B
-  { stage: "group", groupName: "B", homeTeam: "Canada", awayTeam: "Bosnia", matchDate: "2026-06-12", sortOrder: 7 },
-  { stage: "group", groupName: "B", homeTeam: "Qatar", awayTeam: "Elveția", matchDate: "2026-06-13", sortOrder: 8 },
-  { stage: "group", groupName: "B", homeTeam: "Elveția", awayTeam: "Bosnia", matchDate: "2026-06-18", sortOrder: 9 },
-  { stage: "group", groupName: "B", homeTeam: "Canada", awayTeam: "Qatar", matchDate: "2026-06-19", sortOrder: 10 },
-  { stage: "group", groupName: "B", homeTeam: "Elveția", awayTeam: "Canada", matchDate: "2026-06-24", sortOrder: 11 },
-  { stage: "group", groupName: "B", homeTeam: "Bosnia", awayTeam: "Qatar", matchDate: "2026-06-24", sortOrder: 12 },
-  // Group C
-  { stage: "group", groupName: "C", homeTeam: "Brazilia", awayTeam: "Maroc", matchDate: "2026-06-14", sortOrder: 13 },
-  { stage: "group", groupName: "C", homeTeam: "Haiti", awayTeam: "Scoția", matchDate: "2026-06-14", sortOrder: 14 },
-  { stage: "group", groupName: "C", homeTeam: "Maroc", awayTeam: "Scoția", matchDate: "2026-06-20", sortOrder: 15 },
-  { stage: "group", groupName: "C", homeTeam: "Haiti", awayTeam: "Brazilia", matchDate: "2026-06-20", sortOrder: 16 },
-  { stage: "group", groupName: "C", homeTeam: "Scoția", awayTeam: "Brazilia", matchDate: "2026-06-24", sortOrder: 17 },
-  { stage: "group", groupName: "C", homeTeam: "Maroc", awayTeam: "Haiti", matchDate: "2026-06-24", sortOrder: 18 },
-  // Group D
-  { stage: "group", groupName: "D", homeTeam: "SUA", awayTeam: "Paraguay", matchDate: "2026-06-13", sortOrder: 19 },
-  { stage: "group", groupName: "D", homeTeam: "Australia", awayTeam: "Turcia", matchDate: "2026-06-14", sortOrder: 20 },
-  { stage: "group", groupName: "D", homeTeam: "Australia", awayTeam: "SUA", matchDate: "2026-06-19", sortOrder: 21 },
-  { stage: "group", groupName: "D", homeTeam: "Paraguay", awayTeam: "Turcia", matchDate: "2026-06-20", sortOrder: 22 },
-  { stage: "group", groupName: "D", homeTeam: "Turcia", awayTeam: "SUA", matchDate: "2026-06-25", sortOrder: 23 },
-  { stage: "group", groupName: "D", homeTeam: "Paraguay", awayTeam: "Australia", matchDate: "2026-06-25", sortOrder: 24 },
-  // Group E
-  { stage: "group", groupName: "E", homeTeam: "Germania", awayTeam: "Curaçao", matchDate: "2026-06-14", sortOrder: 25 },
-  { stage: "group", groupName: "E", homeTeam: "Coasta de Fildeș", awayTeam: "Ecuador", matchDate: "2026-06-15", sortOrder: 26 },
-  { stage: "group", groupName: "E", homeTeam: "Coasta de Fildeș", awayTeam: "Germania", matchDate: "2026-06-20", sortOrder: 27 },
-  { stage: "group", groupName: "E", homeTeam: "Curaçao", awayTeam: "Ecuador", matchDate: "2026-06-21", sortOrder: 28 },
-  { stage: "group", groupName: "E", homeTeam: "Ecuador", awayTeam: "Germania", matchDate: "2026-06-25", sortOrder: 29 },
-  { stage: "group", groupName: "E", homeTeam: "Curaçao", awayTeam: "Coasta de Fildeș", matchDate: "2026-06-25", sortOrder: 30 },
-  // Group F
-  { stage: "group", groupName: "F", homeTeam: "Olanda", awayTeam: "Japonia", matchDate: "2026-06-14", sortOrder: 31 },
-  { stage: "group", groupName: "F", homeTeam: "Suedia", awayTeam: "Tunisia", matchDate: "2026-06-15", sortOrder: 32 },
-  { stage: "group", groupName: "F", homeTeam: "Suedia", awayTeam: "Olanda", matchDate: "2026-06-20", sortOrder: 33 },
-  { stage: "group", groupName: "F", homeTeam: "Japonia", awayTeam: "Tunisia", matchDate: "2026-06-21", sortOrder: 34 },
-  { stage: "group", groupName: "F", homeTeam: "Japonia", awayTeam: "Suedia", matchDate: "2026-06-25", sortOrder: 35 },
-  { stage: "group", groupName: "F", homeTeam: "Tunisia", awayTeam: "Olanda", matchDate: "2026-06-25", sortOrder: 36 },
-  // Group G
-  { stage: "group", groupName: "G", homeTeam: "Belgia", awayTeam: "Egipt", matchDate: "2026-06-15", sortOrder: 37 },
-  { stage: "group", groupName: "G", homeTeam: "Iran", awayTeam: "Noua Zeelandă", matchDate: "2026-06-15", sortOrder: 38 },
-  { stage: "group", groupName: "G", homeTeam: "Iran", awayTeam: "Belgia", matchDate: "2026-06-19", sortOrder: 39 },
-  { stage: "group", groupName: "G", homeTeam: "Egipt", awayTeam: "Noua Zeelandă", matchDate: "2026-06-19", sortOrder: 40 },
-  { stage: "group", groupName: "G", homeTeam: "Egipt", awayTeam: "Iran", matchDate: "2026-06-23", sortOrder: 41 },
-  { stage: "group", groupName: "G", homeTeam: "Noua Zeelandă", awayTeam: "Belgia", matchDate: "2026-06-23", sortOrder: 42 },
-  // Group H
-  { stage: "group", groupName: "H", homeTeam: "Spania", awayTeam: "Capul Verde", matchDate: "2026-06-15", sortOrder: 43 },
-  { stage: "group", groupName: "H", homeTeam: "Arabia Saudită", awayTeam: "Uruguay", matchDate: "2026-06-16", sortOrder: 44 },
-  { stage: "group", groupName: "H", homeTeam: "Arabia Saudită", awayTeam: "Spania", matchDate: "2026-06-21", sortOrder: 45 },
-  { stage: "group", groupName: "H", homeTeam: "Capul Verde", awayTeam: "Uruguay", matchDate: "2026-06-22", sortOrder: 46 },
-  { stage: "group", groupName: "H", homeTeam: "Capul Verde", awayTeam: "Arabia Saudită", matchDate: "2026-06-26", sortOrder: 47 },
-  { stage: "group", groupName: "H", homeTeam: "Uruguay", awayTeam: "Spania", matchDate: "2026-06-26", sortOrder: 48 },
-  // Group I
-  { stage: "group", groupName: "I", homeTeam: "Franța", awayTeam: "Senegal", matchDate: "2026-06-16", sortOrder: 49 },
-  { stage: "group", groupName: "I", homeTeam: "Irak", awayTeam: "Norvegia", matchDate: "2026-06-17", sortOrder: 50 },
-  { stage: "group", groupName: "I", homeTeam: "Franța", awayTeam: "Irak", matchDate: "2026-06-23", sortOrder: 51 },
-  { stage: "group", groupName: "I", homeTeam: "Norvegia", awayTeam: "Senegal", matchDate: "2026-06-23", sortOrder: 52 },
-  { stage: "group", groupName: "I", homeTeam: "Norvegia", awayTeam: "Franța", matchDate: "2026-06-26", sortOrder: 53 },
-  { stage: "group", groupName: "I", homeTeam: "Senegal", awayTeam: "Irak", matchDate: "2026-06-26", sortOrder: 54 },
-  // Group J
-  { stage: "group", groupName: "J", homeTeam: "Argentina", awayTeam: "Algeria", matchDate: "2026-06-17", sortOrder: 55 },
-  { stage: "group", groupName: "J", homeTeam: "Austria", awayTeam: "Iordania", matchDate: "2026-06-17", sortOrder: 56 },
-  { stage: "group", groupName: "J", homeTeam: "Argentina", awayTeam: "Austria", matchDate: "2026-06-22", sortOrder: 57 },
-  { stage: "group", groupName: "J", homeTeam: "Iordania", awayTeam: "Algeria", matchDate: "2026-06-23", sortOrder: 58 },
-  { stage: "group", groupName: "J", homeTeam: "Algeria", awayTeam: "Austria", matchDate: "2026-06-28", sortOrder: 59 },
-  { stage: "group", groupName: "J", homeTeam: "Iordania", awayTeam: "Argentina", matchDate: "2026-06-28", sortOrder: 60 },
-  // Group K
-  { stage: "group", groupName: "K", homeTeam: "Portugalia", awayTeam: "RD Congo", matchDate: "2026-06-17", sortOrder: 61 },
-  { stage: "group", groupName: "K", homeTeam: "Uzbekistan", awayTeam: "Columbia", matchDate: "2026-06-18", sortOrder: 62 },
-  { stage: "group", groupName: "K", homeTeam: "Portugalia", awayTeam: "Uzbekistan", matchDate: "2026-06-24", sortOrder: 63 },
-  { stage: "group", groupName: "K", homeTeam: "Columbia", awayTeam: "RD Congo", matchDate: "2026-06-24", sortOrder: 64 },
-  { stage: "group", groupName: "K", homeTeam: "Columbia", awayTeam: "Portugalia", matchDate: "2026-06-28", sortOrder: 65 },
-  { stage: "group", groupName: "K", homeTeam: "RD Congo", awayTeam: "Uzbekistan", matchDate: "2026-06-28", sortOrder: 66 },
-  // Group L
-  { stage: "group", groupName: "L", homeTeam: "Anglia", awayTeam: "Croația", matchDate: "2026-06-17", sortOrder: 67 },
-  { stage: "group", groupName: "L", homeTeam: "Ghana", awayTeam: "Panama", matchDate: "2026-06-18", sortOrder: 68 },
-  { stage: "group", groupName: "L", homeTeam: "Anglia", awayTeam: "Ghana", matchDate: "2026-06-23", sortOrder: 69 },
-  { stage: "group", groupName: "L", homeTeam: "Panama", awayTeam: "Croația", matchDate: "2026-06-24", sortOrder: 70 },
-  { stage: "group", groupName: "L", homeTeam: "Panama", awayTeam: "Anglia", matchDate: "2026-06-27", sortOrder: 71 },
-  { stage: "group", groupName: "L", homeTeam: "Croația", awayTeam: "Ghana", matchDate: "2026-06-27", sortOrder: 72 },
+  { stage: "group", groupName: "B", homeTeam: "Canada", awayTeam: "Bosnia", matchDate: "2026-06-12", sortOrder: 3 },
+
+  // 2026-06-13
+  { stage: "group", groupName: "B", homeTeam: "Qatar", awayTeam: "Elveția", matchDate: "2026-06-13", sortOrder: 4 },
+  { stage: "group", groupName: "D", homeTeam: "SUA", awayTeam: "Paraguay", matchDate: "2026-06-13", sortOrder: 5 },
+
+  // 2026-06-14
+  { stage: "group", groupName: "C", homeTeam: "Brazilia", awayTeam: "Maroc", matchDate: "2026-06-14", sortOrder: 6 },
+  { stage: "group", groupName: "C", homeTeam: "Haiti", awayTeam: "Scoția", matchDate: "2026-06-14", sortOrder: 7 },
+  { stage: "group", groupName: "D", homeTeam: "Australia", awayTeam: "Turcia", matchDate: "2026-06-14", sortOrder: 8 },
+  { stage: "group", groupName: "E", homeTeam: "Germania", awayTeam: "Curaçao", matchDate: "2026-06-14", sortOrder: 9 },
+  { stage: "group", groupName: "F", homeTeam: "Olanda", awayTeam: "Japonia", matchDate: "2026-06-14", sortOrder: 10 },
+
+  // 2026-06-15
+  { stage: "group", groupName: "E", homeTeam: "Coasta de Fildeș", awayTeam: "Ecuador", matchDate: "2026-06-15", sortOrder: 11 },
+  { stage: "group", groupName: "F", homeTeam: "Suedia", awayTeam: "Tunisia", matchDate: "2026-06-15", sortOrder: 12 },
+  { stage: "group", groupName: "G", homeTeam: "Belgia", awayTeam: "Egipt", matchDate: "2026-06-15", sortOrder: 13 },
+  { stage: "group", groupName: "G", homeTeam: "Iran", awayTeam: "Noua Zeelandă", matchDate: "2026-06-15", sortOrder: 14 },
+  { stage: "group", groupName: "H", homeTeam: "Spania", awayTeam: "Capul Verde", matchDate: "2026-06-15", sortOrder: 15 },
+
+  // 2026-06-16
+  { stage: "group", groupName: "H", homeTeam: "Arabia Saudită", awayTeam: "Uruguay", matchDate: "2026-06-16", sortOrder: 16 },
+  { stage: "group", groupName: "I", homeTeam: "Franța", awayTeam: "Senegal", matchDate: "2026-06-16", sortOrder: 17 },
+
+  // 2026-06-17
+  { stage: "group", groupName: "I", homeTeam: "Irak", awayTeam: "Norvegia", matchDate: "2026-06-17", sortOrder: 18 },
+  { stage: "group", groupName: "J", homeTeam: "Argentina", awayTeam: "Algeria", matchDate: "2026-06-17", sortOrder: 19 },
+  { stage: "group", groupName: "J", homeTeam: "Austria", awayTeam: "Iordania", matchDate: "2026-06-17", sortOrder: 20 },
+  { stage: "group", groupName: "K", homeTeam: "Portugalia", awayTeam: "RD Congo", matchDate: "2026-06-17", sortOrder: 21 },
+  { stage: "group", groupName: "L", homeTeam: "Anglia", awayTeam: "Croația", matchDate: "2026-06-17", sortOrder: 22 },
+
+  // 2026-06-18
+  { stage: "group", groupName: "A", homeTeam: "Cehia", awayTeam: "Africa de Sud", matchDate: "2026-06-18", sortOrder: 23 },
+  { stage: "group", groupName: "B", homeTeam: "Elveția", awayTeam: "Bosnia", matchDate: "2026-06-18", sortOrder: 24 },
+  { stage: "group", groupName: "K", homeTeam: "Uzbekistan", awayTeam: "Columbia", matchDate: "2026-06-18", sortOrder: 25 },
+  { stage: "group", groupName: "L", homeTeam: "Ghana", awayTeam: "Panama", matchDate: "2026-06-18", sortOrder: 26 },
+
+  // 2026-06-19
+  { stage: "group", groupName: "A", homeTeam: "Mexic", awayTeam: "Coreea de Sud", matchDate: "2026-06-19", sortOrder: 27 },
+  { stage: "group", groupName: "B", homeTeam: "Canada", awayTeam: "Qatar", matchDate: "2026-06-19", sortOrder: 28 },
+  { stage: "group", groupName: "D", homeTeam: "Australia", awayTeam: "SUA", matchDate: "2026-06-19", sortOrder: 29 },
+  { stage: "group", groupName: "G", homeTeam: "Iran", awayTeam: "Belgia", matchDate: "2026-06-19", sortOrder: 30 },
+  { stage: "group", groupName: "G", homeTeam: "Egipt", awayTeam: "Noua Zeelandă", matchDate: "2026-06-19", sortOrder: 31 },
+
+  // 2026-06-20
+  { stage: "group", groupName: "C", homeTeam: "Maroc", awayTeam: "Scoția", matchDate: "2026-06-20", sortOrder: 32 },
+  { stage: "group", groupName: "C", homeTeam: "Haiti", awayTeam: "Brazilia", matchDate: "2026-06-20", sortOrder: 33 },
+  { stage: "group", groupName: "D", homeTeam: "Paraguay", awayTeam: "Turcia", matchDate: "2026-06-20", sortOrder: 34 },
+  { stage: "group", groupName: "E", homeTeam: "Coasta de Fildeș", awayTeam: "Germania", matchDate: "2026-06-20", sortOrder: 35 },
+  { stage: "group", groupName: "F", homeTeam: "Suedia", awayTeam: "Olanda", matchDate: "2026-06-20", sortOrder: 36 },
+
+  // 2026-06-21
+  { stage: "group", groupName: "E", homeTeam: "Curaçao", awayTeam: "Ecuador", matchDate: "2026-06-21", sortOrder: 37 },
+  { stage: "group", groupName: "F", homeTeam: "Japonia", awayTeam: "Tunisia", matchDate: "2026-06-21", sortOrder: 38 },
+  { stage: "group", groupName: "H", homeTeam: "Arabia Saudită", awayTeam: "Spania", matchDate: "2026-06-21", sortOrder: 39 },
+
+  // 2026-06-22
+  { stage: "group", groupName: "H", homeTeam: "Capul Verde", awayTeam: "Uruguay", matchDate: "2026-06-22", sortOrder: 40 },
+  { stage: "group", groupName: "J", homeTeam: "Argentina", awayTeam: "Austria", matchDate: "2026-06-22", sortOrder: 41 },
+
+  // 2026-06-23
+  { stage: "group", groupName: "G", homeTeam: "Egipt", awayTeam: "Iran", matchDate: "2026-06-23", sortOrder: 42 },
+  { stage: "group", groupName: "G", homeTeam: "Noua Zeelandă", awayTeam: "Belgia", matchDate: "2026-06-23", sortOrder: 43 },
+  { stage: "group", groupName: "I", homeTeam: "Franța", awayTeam: "Irak", matchDate: "2026-06-23", sortOrder: 44 },
+  { stage: "group", groupName: "I", homeTeam: "Norvegia", awayTeam: "Senegal", matchDate: "2026-06-23", sortOrder: 45 },
+  { stage: "group", groupName: "J", homeTeam: "Iordania", awayTeam: "Algeria", matchDate: "2026-06-23", sortOrder: 46 },
+  { stage: "group", groupName: "L", homeTeam: "Anglia", awayTeam: "Ghana", matchDate: "2026-06-23", sortOrder: 47 },
+
+  // 2026-06-24
+  { stage: "group", groupName: "A", homeTeam: "Cehia", awayTeam: "Mexic", matchDate: "2026-06-24", sortOrder: 48 },
+  { stage: "group", groupName: "A", homeTeam: "Africa de Sud", awayTeam: "Coreea de Sud", matchDate: "2026-06-24", sortOrder: 49 },
+  { stage: "group", groupName: "B", homeTeam: "Elveția", awayTeam: "Canada", matchDate: "2026-06-24", sortOrder: 50 },
+  { stage: "group", groupName: "B", homeTeam: "Bosnia", awayTeam: "Qatar", matchDate: "2026-06-24", sortOrder: 51 },
+  { stage: "group", groupName: "C", homeTeam: "Scoția", awayTeam: "Brazilia", matchDate: "2026-06-24", sortOrder: 52 },
+  { stage: "group", groupName: "C", homeTeam: "Maroc", awayTeam: "Haiti", matchDate: "2026-06-24", sortOrder: 53 },
+  { stage: "group", groupName: "K", homeTeam: "Portugalia", awayTeam: "Uzbekistan", matchDate: "2026-06-24", sortOrder: 54 },
+  { stage: "group", groupName: "K", homeTeam: "Columbia", awayTeam: "RD Congo", matchDate: "2026-06-24", sortOrder: 55 },
+  { stage: "group", groupName: "L", homeTeam: "Panama", awayTeam: "Croația", matchDate: "2026-06-24", sortOrder: 56 },
+
+  // 2026-06-25
+  { stage: "group", groupName: "D", homeTeam: "Turcia", awayTeam: "SUA", matchDate: "2026-06-25", sortOrder: 57 },
+  { stage: "group", groupName: "D", homeTeam: "Paraguay", awayTeam: "Australia", matchDate: "2026-06-25", sortOrder: 58 },
+  { stage: "group", groupName: "E", homeTeam: "Ecuador", awayTeam: "Germania", matchDate: "2026-06-25", sortOrder: 59 },
+  { stage: "group", groupName: "E", homeTeam: "Curaçao", awayTeam: "Coasta de Fildeș", matchDate: "2026-06-25", sortOrder: 60 },
+  { stage: "group", groupName: "F", homeTeam: "Japonia", awayTeam: "Suedia", matchDate: "2026-06-25", sortOrder: 61 },
+  { stage: "group", groupName: "F", homeTeam: "Tunisia", awayTeam: "Olanda", matchDate: "2026-06-25", sortOrder: 62 },
+
+  // 2026-06-26
+  { stage: "group", groupName: "H", homeTeam: "Capul Verde", awayTeam: "Arabia Saudită", matchDate: "2026-06-26", sortOrder: 63 },
+  { stage: "group", groupName: "H", homeTeam: "Uruguay", awayTeam: "Spania", matchDate: "2026-06-26", sortOrder: 64 },
+  { stage: "group", groupName: "I", homeTeam: "Norvegia", awayTeam: "Franța", matchDate: "2026-06-26", sortOrder: 65 },
+  { stage: "group", groupName: "I", homeTeam: "Senegal", awayTeam: "Irak", matchDate: "2026-06-26", sortOrder: 66 },
+
+  // 2026-06-27
+  { stage: "group", groupName: "L", homeTeam: "Panama", awayTeam: "Anglia", matchDate: "2026-06-27", sortOrder: 67 },
+  { stage: "group", groupName: "L", homeTeam: "Croația", awayTeam: "Ghana", matchDate: "2026-06-27", sortOrder: 68 },
+
+  // 2026-06-28
+  { stage: "group", groupName: "J", homeTeam: "Algeria", awayTeam: "Austria", matchDate: "2026-06-28", sortOrder: 69 },
+  { stage: "group", groupName: "J", homeTeam: "Iordania", awayTeam: "Argentina", matchDate: "2026-06-28", sortOrder: 70 },
+  { stage: "group", groupName: "K", homeTeam: "Columbia", awayTeam: "Portugalia", matchDate: "2026-06-28", sortOrder: 71 },
+  { stage: "group", groupName: "K", homeTeam: "RD Congo", awayTeam: "Uzbekistan", matchDate: "2026-06-28", sortOrder: 72 },
 ];
 
 // Knockout stage placeholders
